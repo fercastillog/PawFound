@@ -1,0 +1,7 @@
+{
+  "name": "PawFound",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
