@@ -4,6 +4,8 @@ import { Component, OnInit } from '@angular/core';
   selector: 'app-paw-found',
   templateUrl: './paw-found.page.html',
   styleUrls: ['./paw-found.page.scss'],
+  standalone: false,
+  
 })
 export class PawFoundPage implements OnInit {
 

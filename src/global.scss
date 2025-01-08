@@ -36,6 +36,20 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
 
-.ion-content{
-    background-color: #4c8479, #2b5f56;
+:root{
+    --ion-color-primary: #4c8479; /* Define un color */
+    --ion-color-primary-dark: #2b5f56; /* Si necesitas otro tono */
+    --ion-color-secondary: #edb232;
+    --ion-font-family: 'arial';    
 }
+
+body {
+    font-family: var(--ion-font-family);
+
+}
+
+.ion-button{
+    border-radius: 25%;
+    
+}
+

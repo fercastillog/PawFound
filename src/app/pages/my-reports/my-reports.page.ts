@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
   selector: 'app-my-reports',
   templateUrl: './my-reports.page.html',
   styleUrls: ['./my-reports.page.scss'],
+  standalone: false,
 })
 export class MyReportsPage implements OnInit {
 
