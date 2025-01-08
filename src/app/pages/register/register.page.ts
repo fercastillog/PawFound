@@ -13,17 +13,23 @@ export class RegisterPage implements OnInit {
 
   constructor(private fb: FormBuilder, private  navCtrl: NavController) {
     this.registerForm = this.fb.group({
+      name:['', Validators.required, Validators.pattern('[a-zA-Z ]*')],
+      phone: ['', Validators.required, Validators.pattern('[0-9]{9}')],
+      address: ['', Validators.required],
+      city: ['', Validators.required],
+      zip: ['', Validators.required, Validators.pattern('[0-9]{5}')],
+      country: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
-      confirmPassword: ['', [Validators.required]]
+      password: ['', Validators.required]
     });
+    
    }
 
-   // Método para incia sesión
+   // Método para Registrar usuario
    onRegister(){
     if(this.registerForm.valid){
-      const { email, password, confirmPassword } = this.registerForm.value;
-      console.log('Register: ', email, password,confirmPassword);
+      const { name,phone,email, password } = this.registerForm.value;
+      console.log('Register: ',name,phone, email, password);
       // Aquí se llamará al AuthService para manejar la autenticación
       // Redireccionara a la pagina home o where ever ...
     }
