@@ -1,13 +1,48 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>profile</ion-title>
+    <ion-title>Perfil</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">profile</ion-title>
-    </ion-toolbar>
-  </ion-header>
-</ion-content>
+
+<ion-content>
+
+  <!-- Foto de perfil de usuario, puede escojer imagen desde la galería o sacar una foto con el telefono-->
+  <ion-img src="assets/img/user.png" alt="User Image"></ion-img>
+  <!-- Botón para cambiar la foto de perfil-->
+  <ion-button expand="block" (click)="changeProfilePic()">Cambiar Foto</ion-button>
+  
+<form>
+  <!--Cambiar Nombre y Apellido-->
+
+    <ion-label position="stacked">Nombre y Apellido</ion-label>
+    <ion-input type="text" name="name" required></ion-input>
+
+</form>
+  <!-- Botón para cambiar de page y cambiar contraseña -->
+
+    <ion-button routerLink="/change-password" expand="block">
+      <ion-label>Cambiar Contraseña</ion-label>
+    </ion-button>
+
+  <!-- Botón para ir a my-reports-->
+
+    <ion-button routerLink="/my-reports" expand="block">
+      <ion-label>Mis Reportes</ion-label>
+    </ion-button>
+
+  <!-- Botón para ir a report-->
+
+    <ion-button routerLink="/report" expand="block">
+      <ion-label>Reportar Mascota</ion-label>
+    </ion-button>
+
+  <!-- Botón para cerrar sesión-->
+   <ion-button>
+    <ion-label>Cerrar Sesión</ion-label>
+    <ion-icon name="log-out-outline" slot="end"></ion-icon>
+   </ion-button>
+
+  </ion-content>
+
+

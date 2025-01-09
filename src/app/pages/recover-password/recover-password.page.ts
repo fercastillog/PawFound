@@ -8,7 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RecoverPasswordPage implements OnInit {
 
-  constructor() { }
+  constructor() { 
+    
+  }
 
   ngOnInit() {
   }
