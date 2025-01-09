@@ -13,4 +13,9 @@ export class ChangePasswordPage implements OnInit {
   ngOnInit() {
   }
 
+  cambioPassword() {
+    // Implementación de la lógica para cambiar la contraseña
+    alert('Contraseña cambiada exitosamente!');
+  }
+
 }
