@@ -1,13 +1,42 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>report</ion-title>
+    <ion-title>Reportar Mascota</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">report</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  
+  <!-- Direccion -->
+   <form>
+    <ion-item>
+      <ion-label>Ubicación</ion-label>
+      <ion-input type="text" name="ubicacion" required></ion-input>
+    </ion-item>
+  <!-- Fecha -->
+    <ion-item>
+      <ion-label>Fecha</ion-label><br>
+      <ion-datetime-button datetime="datetime"></ion-datetime-button>
+
+      <ion-modal [keepContentsMounted]="true">
+      <ng-template>
+        <ion-datetime id="datetime"></ion-datetime>
+      </ng-template>
+      </ion-modal>
+    </ion-item>
+  <!-- Numero de contacto -->
+    <ion-item>
+      <ion-label>Telefono</ion-label>
+      <ion-input type="phone" name="phone" required></ion-input>
+    </ion-item>
+  <!-- Descripcion de la mascota encontrada -->
+    <ion-item>
+      <ion-label>Descripción</ion-label>
+      <ion-textarea name="descripcion" required></ion-textarea>
+    </ion-item>
+  <!-- Boton para enviar el reporte cuando todos los campos esten completos-->
+    <ion-button type="submit" expand="block">Enviar</ion-button>
+    <ion-note>
+      Si no deseas reportar una mascota, haz click en <a href="/profile">Atrás</a>.
+    </ion-note>
+  </form>
 </ion-content>
