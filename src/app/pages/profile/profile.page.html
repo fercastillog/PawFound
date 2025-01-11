@@ -7,20 +7,29 @@
 
 <ion-content>
 
-  <!-- <ion-avatar>
-    <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
-  </ion-avatar>
-  Foto de perfil de usuario, puede escojer imagen desde la galería o sacar una foto con el telefono-->
-  <ion-img src="https://ionicframework.com/docs/img/demos/card-media.png" alt="User Image"></ion-img>
-  <!-- Botón para cambiar la foto de perfil-->
-  <ion-button expand="block" (click)="changeProfilePic()">Cambiar Foto</ion-button>
+ <!-- Foto de perfil de usuario, puede escojer imagen desde la galería o sacar una foto con el telefono-->
+  <div class="profile-image-container">
+    <img *ngIf="userImage; else placeholder" [src]="userImage" alt="Foto de perfil" />
+    <ng-template #placeholder>
+      <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+    </ng-template>
+  </div>
+
+  <!-- Botón para tomar una foto -->
+  <ion-button expand="block" color="primary" (click)="changeProfilePic()">
+    Cambiar Foto
+  </ion-button>
   
 <form>
-  <!--Cambiar Nombre y Apellido-->
-
-    <ion-label position="stacked">Nombre y Apellido</ion-label>
-    <ion-input type="text" name="name" required></ion-input>
-
+  <!-- Editar nombre y apellido -->
+    <ion-item>
+      <ion-label position="stacked">Nombre</ion-label>
+      <ion-input [(ngModel)]="user.name"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Apellido</ion-label>
+      <ion-input [(ngModel)]="user.lastName"></ion-input>
+    </ion-item>
 </form>
   <!-- Botón para cambiar de page y cambiar contraseña -->
 
@@ -41,10 +50,10 @@
     </ion-button>
 
   <!-- Botón para cerrar sesión-->
-   <ion-button>
+  <ion-button expand="block" color="danger" (click)="logout()">
     <ion-label>Cerrar Sesión</ion-label>
-    <ion-icon name="log-out-outline" slot="end" expand="block"></ion-icon>
-   </ion-button>
+    <ion-icon name="log-out-outline" slot="end"></ion-icon>
+  </ion-button>
 
    <footer></footer>
   </ion-content>
