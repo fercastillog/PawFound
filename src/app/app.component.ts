@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -7,5 +7,12 @@ import { Component } from '@angular/core';
   standalone: false,
 })
 export class AppComponent {
+  
+  @Input() title!: string;
+  
   constructor() {}
+
+  ngOnInit() {
+    
+  }
 }
