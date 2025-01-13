@@ -20,7 +20,7 @@ export class RegisterPage implements OnInit {
       zip: ['', Validators.required, Validators.pattern('[0-9]{5}')],
       country: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      password: ['', Validators.required, Validators.minLength(6), Validators.pattern('[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};":\\|,.<>\/?]{8,}')]
     });
     
    }
@@ -36,9 +36,6 @@ export class RegisterPage implements OnInit {
    }
 
    // Navegar a la pagina de registro
-   goToLogin(){
-    this.navCtrl.navigateForward('/login');
-   }
 
   ngOnInit() {
   }

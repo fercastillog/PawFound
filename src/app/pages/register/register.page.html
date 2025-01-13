@@ -1,6 +1,6 @@
-<ion-header>
+<ion-header class="profile-header">
   <ion-toolbar>
-    <ion-title>Registro</ion-title>
+    <ion-title class="profile-header-title">Registro</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -37,11 +37,11 @@
   </form>
 </ion-content> -->
 
-<ion-content>
+<ion-content class="register-container">
   <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
 
     <!-- Campo de Nombre -->
-      <ion-item class="input-item" lines="none">
+      <ion-item class="register-input" lines="none">
       <ion-label position="floating">Nombre</ion-label>
       <ion-input type="name" formControlName="name"></ion-input>
        <div class="error-message" *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched ">
@@ -64,7 +64,7 @@
       <ion-input type="email" formControlName="email"></ion-input>
     </ion-item>
     <div class="error-message" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched ">
-      Ingresa un correo válido
+        Ingresa un correo válido
     </div>
 
     <!-- Campo de Contraseña -->
@@ -73,14 +73,14 @@
       <ion-input type="password" formControlName="password"></ion-input>
     </ion-item>
     <div class="error-message" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched ">
-      Ingresa una contraseña válida
+        Ingresa una contraseña válida
     </div>
 
   </form>
 
     
   <!-- Botón de Registro -->
-    <ion-button type="submit" expand="block" [disabled]="registerForm.invalid" routerLink="/login">
+    <ion-button class="button-primary" type="submit" expand="block" [disabled]="registerForm.invalid" routerLink="/login">
       Registrarse
     </ion-button>
 
@@ -88,3 +88,4 @@
       Si ya tienes una cuenta, haz click en <a href="/login">Iniciar Sesión</a>.
   </ion-note>
 </ion-content>
+

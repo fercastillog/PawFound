@@ -1,14 +1,112 @@
-.profile-image-container {
+// Estilo general del contenedor
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  justify-content: center;
+  background-color: #ffffff; // Color de fondo de la pantalla
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+// Estilo del encabezado
+.profile-header {
+  width: 100%;
+  background-color: #003d31; // Color verde del encabezado
+  color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-radius: 0 0 15px 15px; // Bordes redondeados abajo
+  font-size: 20px;
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+// Estilo del icono y título
+.profile-header-title {
+  flex: 1;
+  text-align: center;
+}
+
+// Estilo de la imagen de perfil
+.profile-picture {
+  position: relative;
+  margin: 20px 0;
+
+  img {
+    width: 100px; // Tamaño de la imagen circular
+    height: 100px;
+    border-radius: 50%;
+    border: 2px solid #004d3b; // Borde verde oscuro
+  }
+
+  .camera-icon {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: #ffbf00; // Fondo amarillo del icono
+    border-radius: 50%;
+    padding: 6px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 20px 0;
-  
-    img {
-      width: 150px;
-      height: 150px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid var(--ion-color-primary);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Estilo del input para el nombre
+.profile-name-input {
+  display: flex;
+  align-items: center;
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  padding: 10px 20px;
+  margin: 15px 0;
+  width: 80%;
+
+  ion-icon {
+    margin-right: 10px;
+    color: #777; // Color del ícono
+  }
+
+  input {
+    border: none;
+    outline: none;
+    background: transparent;
+    flex: 1;
+    font-size: 16px;
+    color: #555;
+  }
+}
+
+// Estilo de los botones
+.profile-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 80%;
+
+  .profile-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #004d3b; // Color verde del botón
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 25px;
+    padding: 12px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+
+    &:disabled {
+      background-color: #cccccc; // Color gris para botones deshabilitados
+      cursor: not-allowed;
     }
   }
+}
