@@ -1,21 +1,98 @@
-
-// Estilo del encabezado
+// Encabezado
 .profile-header {
   width: 100%;
-  background-color: #003d31; // Color verde del encabezado
+  background-color: #003d31;
   color: #ffffff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   padding: 16px;
-  border-radius: 0 0 15px 15px; // Bordes redondeados abajo
-  font-size: 20px;
-  font-weight: bold;
+  border-radius: 0 0 15px 15px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-// Estilo del icono y título
 .profile-header-title {
-  flex: 1;
   text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+// Contenedor Principal
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  gap: 15px;
+  background-color: #ffffff;
+  height: 100vh;
+  box-sizing: border-box;
+}
+.profile-name-container {
+  display: flex;
+  flex-direction: column; // Organiza los elementos en columna
+  align-items: center; // Centra horizontalmente
+  justify-content: center; // Centra verticalmente
+  height: 50vh; // Ocupa toda la altura de la pantalla
+  padding: 10px; // Reduce el padding general
+  gap: 20px; // Usa gap para controlar el espaciado entre los elementos
+}
+
+
+// Inputs
+.profile-name-input {
+  background-color: transparent;
+  border-radius: 25px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+  ion-icon {
+    margin-right: 10px;
+    color: #777;
+  }
+
+  ion-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 16px;
+  }
+}
+
+// Botón
+.profile-button {
+  display: flex;
+  justify-content: center; // Centra el contenido del botón horizontalmente
+  align-items: center; // Centra el contenido del botón verticalmente
+  background-color: #004d3b; // Color verde del botón
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 25px;
+  padding: 12px;
+  width: 80%; // Hace que los botones ocupen el 80% del ancho del contenedor
+  max-width: 300px; // Define un ancho máximo opcional para evitar botones demasiado grandes
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  text-align: center;
+}
+// Mensajes de error
+.error-message {
+  font-size: 12px;
+  color: #d9534f;
+  margin-top: -10px;
+  text-align: left;
+  padding-left: 10px;
+}
+
+// Nota de ayuda
+.profile-note {
+  font-size: 14px;
+  color: #777;
+  margin-top: 15px;
+
+  a {
+    color: #003d31;
+    font-weight: bold;
+  }
 }

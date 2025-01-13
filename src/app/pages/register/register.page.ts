@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class RegisterPage implements OnInit {
   registerForm: FormGroup;
-  showMessage: boolean = false;
+  successMessage: boolean = false;
   constructor(private fb: FormBuilder, private  navCtrl: NavController,private router: Router) {
     this.registerForm = this.fb.group({
       name:['', Validators.required, Validators.pattern('[a-zA-Z ]*')],
@@ -21,7 +21,14 @@ export class RegisterPage implements OnInit {
       zip: ['', Validators.required, Validators.pattern('[0-9]{5}')],
       country: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required, Validators.minLength(6), Validators.pattern('[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};":\\|,.<>\/?]{8,}')]
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(6),
+          Validators.pattern('[a-zA-Z0-9!@#$%^&*()_+\\-=[\\]{};:"|,.<>/?]{6,}'),
+        ],
+      ],
     });
     
    }
@@ -33,19 +40,14 @@ export class RegisterPage implements OnInit {
       console.log('Register: ',name,phone, email, password);
       // Aquí se llamará al AuthService para manejar la autenticación
       // Redireccionara a la pagina home o where ever ...
-        if (this.registerForm.valid) {
-          this.showMessage = true; // Mostrar el mensaje
-    
-          // Redirigir después de 3 segundos
-          setTimeout(() => {
-            this.router.navigate(['/login']);
-          }, 3000);
-        }
-      }
+      if (this.registerForm.valid) {
+        this.successMessage = true; // Muestra el mensaje
+        setTimeout(() => {
+          this.successMessage = false; // Oculta el mensaje después de 3 segundos
+          this.router.navigate(['/login']); // Redirige a la página de inicio de sesión
+        }, 3000);
+      }}
    }
-
-   // Navegar a la pagina de registro
-   
 
   ngOnInit() {
   }

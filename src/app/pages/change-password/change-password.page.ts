@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-change-password',
@@ -6,16 +7,32 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./change-password.page.scss'],
   standalone: false,
 })
+
+
 export class ChangePasswordPage implements OnInit {
+  changePasswordForm: FormGroup;
+  passwordMatchValidator: any;
 
-  constructor() { }
+  
 
+  constructor(private fb: FormBuilder) {
+    this.changePasswordForm = this.fb.group({
+      actualPassword: ['', Validators.required],
+      newPassword: ['', [Validators.required, Validators.minLength(8)]],
+      confirmNewPassword: ['', Validators.required]
+    }, { validator: this.passwordMatchValidator });
+   }
+
+   
   ngOnInit() {
   }
 
-  cambioPassword() {
-    // Implementación de la lógica para cambiar la contraseña
+  onChange() {
+    if(this.changePasswordForm.valid){
+      const {actualPassword, newPassword, confirmNewPassword} = this.changePasswordForm.value;
+      console.log('Change password: ', actualPassword, newPassword, confirmNewPassword);
     alert('Contraseña cambiada exitosamente!');
   }
 
+}
 }
