@@ -129,7 +129,7 @@
     </div>
 
     <!-- Botón de Enviar -->
-    <ion-button type="submit" expand="block" routerLink="/profile">Enviar</ion-button>
+    <ion-button type="submit" expand="block" [disabled]="reportForm.invalid" routerLink="/profile">Enviar</ion-button>
 
     <!-- Enlace para regresar -->
     <ion-note>
