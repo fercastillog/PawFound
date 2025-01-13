@@ -1,28 +1,18 @@
-// Estilo general del contenedor
-.profile-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 16px;
-  justify-content: center;
-  background-color: #ffffff; // Color de fondo de la pantalla
-  height: 100vh;
-  box-sizing: border-box;
+// Estilo del encabezado
+.profile-header-container {
+  background-color: #ffffff; /* Fondo blanco */
+  border-radius: 15px; /* Bordes redondeados */
+  padding: 8px 16px; /* Espaciado interno */
+  max-width: fit-content; /* Ajusta el tamaño al contenido */
+  margin: 0 auto; /* Centrar horizontalmente */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra para un efecto visual */
 }
 
-// Estilo del encabezado
-.profile-header {
-  width: 100%;
-  background-color: #003d31; // Color verde del encabezado
-  color: #ffffff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px;
-  border-radius: 0 0 15px 15px; // Bordes redondeados abajo
-  font-size: 20px;
-  font-weight: bold;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.profile-header-title {
+  color: #003d31; /* Cambiar el color del texto para que combine */
+  font-size: 18px; /* Ajustar el tamaño del texto si es necesario */
+  font-weight: bold; /* Asegurar que sea negrita */
+  text-align: center; /* Centrar el texto */
 }
 
 // Estilo del icono y título

@@ -1,34 +1,43 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="true" class="profile-header">
   <ion-toolbar>
-    <ion-title>Reportar Mascota</ion-title>
+    <ion-title class="profile-header-title">Reportar Mascota</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="profile-container">
 
-  <form [formGroup]="reportForm" (ngSubmit)="onReport()">
+  <form [formGroup]="reportForm" (ngSubmit)="onReport()" class="profile-name-container">
 
-    <!--Nombre de quien encontro la mascota-->
-    <ion-item class="input-item" lines="none">
+    <!--Nombre de quien encontró la mascota-->
+    <ion-item class="profile-name-input">
       <ion-label position="floating">Nombre</ion-label>
       <ion-input type="text" formControlName="name"></ion-input>
     </ion-item>
     <div class="error-message" *ngIf="reportForm.get('name')?.invalid && reportForm.get('name')?.touched">
         Ingresa un nombre válido
     </div>
-    
+
     <!-- Ubicación de la mascota-->
-     <ion-item class="input-item" lines="none">
+    <ion-item class="profile-name-input">
       <ion-label position="floating">Ubicación</ion-label>
       <ion-input type="text" formControlName="ubicacion"></ion-input>
-    </ion-item>
-    <div class="error-message" *ngIf="reportForm.get('ubicacion')?.invalid && reportForm.get('ubicacion')?.touched">
+      <div class="error-message" *ngIf="reportForm.get('ubicacion')?.invalid && reportForm.get('ubicacion')?.touched">
         Ingresa una ubicación válida
-    </div>
+      </div>
+    </ion-item>
     
-     <!-- Fecha y hora de la mascota-->
-     <ion-item>
-      <ion-label>Fecha</ion-label><br>
+    <!--Número de Teléfono-->
+    <ion-item class="profile-name-input">
+      <ion-label position="floating">Número de Teléfono</ion-label>
+      <ion-input type="tel" formControlName="phone"></ion-input>
+      <div class="error-message" *ngIf="reportForm.get('phone')?.invalid && reportForm.get('phone')?.touched">
+        Ingresa un número de teléfono válido
+      </div>
+    </ion-item>
+
+    <!-- Fecha y hora -->
+    <ion-item class="profile-name-input">
+      <ion-label>Fecha</ion-label>
       <ion-datetime-button datetime="datetime"></ion-datetime-button>
 
       <ion-modal [keepContentsMounted]="true">
@@ -38,8 +47,8 @@
       </ion-modal>
     </ion-item>
 
-    <!--Tipo de Mascota (perro o gato)-->
-    <ion-item>
+    <!--Tipo de Mascota-->
+    <ion-item class="profile-name-input">
       <ion-label>Es perro o gato?</ion-label>
       <ion-radio-group formControlName="animal">
         <ion-radio value="perro">Perro</ion-radio>
@@ -51,7 +60,7 @@
     </ion-item>
 
     <!--Sexo Mascota-->
-    <ion-item>
+    <ion-item class="profile-name-input">
       <ion-label>Sexo</ion-label>
       <ion-radio-group formControlName="sexo">
         <ion-radio value="macho">Macho</ion-radio>
@@ -62,27 +71,25 @@
       </div>  
     </ion-item>
 
-    <!-- Descripción -->
-    <ion-item>
+    <!--Descripción-->
+    <ion-item class="profile-name-input">
       <ion-label position="floating">Descripción</ion-label>
-      <ion-textarea formControlName="description" required></ion-textarea>
+      <ion-textarea formControlName="description"></ion-textarea>
       <div class="error-message" *ngIf="reportForm.get('description')?.invalid && reportForm.get('description')?.touched">
-        Ingresa una descripción válida
+        Ingresa una descripción de la mascota
       </div>
     </ion-item>
 
-    <!--Subir Foto de Mascota-->
-    <ion-item>
-      <ion-label position="fixed">Foto </ion-label>
+    <!--Subir Foto-->
+    <ion-item class="profile-name-input">
+      <ion-label position="fixed">Foto</ion-label>
       <ion-input type="file" formControlName="photo"></ion-input>
       <div class="error-message" *ngIf="reportForm.get('photo')?.invalid && reportForm.get('photo')?.touched">
         Seleccione una imagen para subir
       </div>
-
-      
     </ion-item>
 
-    <!-- Botón de enviar -->
+    <!--Botón de Enviar-->
     <ion-button type="submit" expand="block" [disabled]="reportForm.invalid" routerLink="/profile">Enviar</ion-button>
 
     <!-- Enlace para regresar -->

@@ -35,7 +35,7 @@ export class ReportPage implements OnInit {
   onReport(){
     if(this.reportForm.valid){
       const { name, ubicacion, datetime, phone, animal, sexo, description, photo } = this.reportForm.value;
-      console.log('Report: ',name, ubicacion, datetime, phone, animal, sexo, description, photo);
+      console.log('Report: ',name, ubicacion, phone, datetime, animal, sexo, description, photo);
       // Aquí se llamará al AuthService para manejar la autenticación
       // Redireccionara a la pagina home o where ever...
     }

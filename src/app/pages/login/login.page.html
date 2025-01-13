@@ -1,6 +1,8 @@
 <ion-header class="profile-header">
   <ion-toolbar>
-    <ion-title class="profile-header-title">Iniciar Sesión</ion-title>
+    <div class="profile-header-container">
+      <ion-title class="profile-header-title">Iniciar Sesión</ion-title>
+    </div>
   </ion-toolbar>
 </ion-header>
 
@@ -11,9 +13,9 @@
    </div>
 
    <!-- Formulario de Login -->
-   <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+   <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="profile-name-container">
     <!-- Campo de Correo -->
-    <ion-item class="input-item" lines="none">
+    <ion-item  class="profile-name-input">
       <ion-label position="floating">Correo Electronico</ion-label>
       <ion-input type="email" formControlName="email"></ion-input>
     </ion-item>
@@ -22,7 +24,7 @@
     </div>
 
     <!-- Campo de Contraseña -->
-    <ion-item class="input-item" lines="none">
+    <ion-item  class="profile-name-input">
       <ion-label position="floating">Contraseña</ion-label>
       <ion-input type="password" formControlName="password"></ion-input>
     </ion-item>
