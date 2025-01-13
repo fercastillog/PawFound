@@ -20,6 +20,7 @@
   </div>
 
   <!-- Formulario de edición de nombre -->
+   <div class="profile-name-container">
   <div class="profile-name-input">
     <ion-icon name="person-outline"></ion-icon>
     <ion-input placeholder="Nombre" [(ngModel)]="user.name"></ion-input>
@@ -28,7 +29,7 @@
     <ion-icon name="person-outline"></ion-icon>
     <ion-input placeholder="Apellido" [(ngModel)]="user.lastName"></ion-input>
   </div>
-
+  </div>
   <!-- Botones de acciones -->
   <div class="profile-buttons">
     <button class="profile-button" routerLink="/change-password">

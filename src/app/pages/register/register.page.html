@@ -75,14 +75,11 @@
     <div class="error-message" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched ">
         Ingresa una contraseña válida
     </div>
-
+      <!-- Botón de Registro -->
+      <ion-button class="button-primary" type="submit" expand="block" [disabled]="registerForm.invalid" routerLink="/login">
+        Registrarse
+      </ion-button>
   </form>
-
-    
-  <!-- Botón de Registro -->
-    <ion-button class="button-primary" type="submit" expand="block" [disabled]="registerForm.invalid" routerLink="/login">
-      Registrarse
-    </ion-button>
 
     <ion-note>
       Si ya tienes una cuenta, haz click en <a href="/login">Iniciar Sesión</a>.

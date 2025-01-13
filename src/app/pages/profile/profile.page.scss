@@ -34,14 +34,25 @@
 // Estilo de la imagen de perfil
 .profile-picture {
   position: relative;
-  margin: 20px 0;
+  margin: 20px auto;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 2px solid #004d3b;
+  overflow: hidden;
 
   img {
-    width: 100px; // Tamaño de la imagen circular
-    height: 100px;
-    border-radius: 50%;
-    border: 2px solid #004d3b; // Borde verde oscuro
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease; // Suaviza la transición
   }
+
+  &:hover img {
+    transform: scale(1.1); // Agranda ligeramente al pasar el mouse
+  }
+
+
 
   .camera-icon {
     position: absolute;
@@ -57,7 +68,16 @@
   }
 }
 
-// Estilo del input para el nombre
+.profile-name-container {
+  display: flex;
+  flex-direction: column; // Organiza los elementos en columna
+  align-items: center; // Centra horizontalmente
+  justify-content: center; // Centra verticalmente
+  height: 25vh; // Ocupa toda la altura de la pantalla
+  padding: 10px; // Reduce el padding general
+  gap: 10px; // Usa gap para controlar el espaciado entre los elementos
+}
+
 .profile-name-input {
   display: flex;
   align-items: center;
@@ -65,8 +85,9 @@
   border: 1px solid #ccc;
   border-radius: 25px;
   padding: 10px 20px;
-  margin: 15px 0;
+  margin: 10px 0; // Reduce el margen entre inputs
   width: 80%;
+  max-width: 400px; // Limita el ancho máximo del input para pantallas grandes
 
   ion-icon {
     margin-right: 10px;
@@ -77,23 +98,28 @@
     border: none;
     outline: none;
     background: transparent;
-    flex: 1;
+    flex: 1; // Permite que el input ocupe el espacio disponible
     font-size: 16px;
     color: #555;
+    text-align: center; // Centra el texto dentro del input
   }
 }
+
 
 // Estilo de los botones
 .profile-buttons {
   display: flex;
   flex-direction: column;
+  align-items: center; // Centra horizontalmente
+  justify-content: center; // Centra verticalmente si es necesario
   gap: 10px;
-  width: 80%;
+  width: 100%; // Asegura que ocupe todo el ancho del contenedor padre
+  margin: 0 auto; // Centra el contenedor en su padre
 
   .profile-button {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: center; // Centra el contenido del botón horizontalmente
+    align-items: center; // Centra el contenido del botón verticalmente
     background-color: #004d3b; // Color verde del botón
     color: #ffffff;
     font-size: 16px;
@@ -101,8 +127,11 @@
     border: none;
     border-radius: 25px;
     padding: 12px;
+    width: 80%; // Hace que los botones ocupen el 80% del ancho del contenedor
+    max-width: 300px; // Define un ancho máximo opcional para evitar botones demasiado grandes
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     cursor: pointer;
+    text-align: center;
 
     &:disabled {
       background-color: #cccccc; // Color gris para botones deshabilitados
@@ -110,3 +139,4 @@
     }
   }
 }
+

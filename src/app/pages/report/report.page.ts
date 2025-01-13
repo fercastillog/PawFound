@@ -21,8 +21,9 @@ export class ReportPage implements OnInit {
     datetime: ['', Validators.required],
     phone: ['', Validators.required, Validators.pattern('[0-9]{9}')],
     animal: ['', Validators.required],
-    description: ['', Validators.required],
-    image: ['', Validators.required]
+    sexo:['', Validators.required],
+    description: ['', Validators.required, Validators.maxLength(100)],
+    photo: ['', Validators.required]
 
 
     });
@@ -33,8 +34,8 @@ export class ReportPage implements OnInit {
 
   onReport(){
     if(this.reportForm.valid){
-      const { name, ubicacion, datetime, phone, animal, description, image } = this.reportForm.value;
-      console.log('Report: ',name, ubicacion, datetime, phone, animal, description, image);
+      const { name, ubicacion, datetime, phone, animal, sexo, description, photo } = this.reportForm.value;
+      console.log('Report: ',name, ubicacion, datetime, phone, animal, sexo, description, photo);
       // Aquí se llamará al AuthService para manejar la autenticación
       // Redireccionara a la pagina home o where ever...
     }

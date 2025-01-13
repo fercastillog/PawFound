@@ -5,26 +5,29 @@
 </ion-header>
 
 <ion-content>
-  
-  <!-- Direccion -->
+
   <form [formGroup]="reportForm" (ngSubmit)="onReport()">
-    
-    <!-- Nombre -->
+
+    <!--Nombre de quien encontro la mascota-->
     <ion-item class="input-item" lines="none">
       <ion-label position="floating">Nombre</ion-label>
       <ion-input type="text" formControlName="name"></ion-input>
-      <div class="error-message" *ngIf="reportForm.get('name')?.invalid && reportForm.get('name')?.touched">
-        Ingresa un nombre válido
-      </div>
-      <ion-label position="floating">Ubicacion</ion-label>
-      <ion-input type="text" formControlName="ubicacion"></ion-input>
-      <div class="error-message" *ngIf="reportForm.get('ubicacion')?.invalid && reportForm.get('ubicacion')?.touched">
-        Ingresa una direccion válida
-      </div>
     </ion-item>
-
-    <!-- Fecha -->
-    <ion-item>
+    <div class="error-message" *ngIf="reportForm.get('name')?.invalid && reportForm.get('name')?.touched">
+        Ingresa un nombre válido
+    </div>
+    
+    <!-- Ubicación de la mascota-->
+     <ion-item class="input-item" lines="none">
+      <ion-label position="floating">Ubicación</ion-label>
+      <ion-input type="text" formControlName="ubicacion"></ion-input>
+    </ion-item>
+    <div class="error-message" *ngIf="reportForm.get('ubicacion')?.invalid && reportForm.get('ubicacion')?.touched">
+        Ingresa una ubicación válida
+    </div>
+    
+     <!-- Fecha y hora de la mascota-->
+     <ion-item>
       <ion-label>Fecha</ion-label><br>
       <ion-datetime-button datetime="datetime"></ion-datetime-button>
 
@@ -35,46 +38,48 @@
       </ion-modal>
     </ion-item>
 
-    <!-- Numero de contacto -->
-    <ion-item>
-      <ion-label position="floating">Telefono</ion-label>
-      <ion-input type="phone" formControlName="phone" required></ion-input>
-      <div class="error-message" *ngIf="reportForm.get('phone')?.invalid && reportForm.get('phone')?.touched">
-        Ingresa un telefono válido
-      </div>
-    </ion-item>
-
-    <!-- Selección de perro o gato -->
+    <!--Tipo de Mascota (perro o gato)-->
     <ion-item>
       <ion-label>Es perro o gato?</ion-label>
       <ion-radio-group formControlName="animal">
         <ion-radio value="perro">Perro</ion-radio>
         <ion-radio value="gato">Gato</ion-radio>
       </ion-radio-group>
+      <div class="error-message" *ngIf="reportForm.get('animal')?.invalid && reportForm.get('animal')?.touched">
+        Seleccione un tipo de mascota
+      </div>  
     </ion-item>
 
-    <!-- Sexo -->
+    <!--Sexo Mascota-->
     <ion-item>
       <ion-label>Sexo</ion-label>
       <ion-radio-group formControlName="sexo">
         <ion-radio value="macho">Macho</ion-radio>
         <ion-radio value="hembra">Hembra</ion-radio>
       </ion-radio-group>
-    </ion-item>
-
-    <!-- Imagen de la mascota -->
-    <ion-item>
-      <ion-label>Imagen</ion-label>
-      <ion-input type="file" formControlName="image"></ion-input>
+      <div class="error-message" *ngIf="reportForm.get('sexo')?.invalid && reportForm.get('sexo')?.touched">
+        Seleccione un tipo de mascota
+      </div>  
     </ion-item>
 
     <!-- Descripción -->
     <ion-item>
       <ion-label position="floating">Descripción</ion-label>
-      <ion-textarea formControlName="descripcion" required></ion-textarea>
-      <div class="error-message" *ngIf="reportForm.get('descripcion')?.invalid && reportForm.get('descripcion')?.touched">
+      <ion-textarea formControlName="description" required></ion-textarea>
+      <div class="error-message" *ngIf="reportForm.get('description')?.invalid && reportForm.get('description')?.touched">
         Ingresa una descripción válida
       </div>
+    </ion-item>
+
+    <!--Subir Foto de Mascota-->
+    <ion-item>
+      <ion-label position="fixed">Foto </ion-label>
+      <ion-input type="file" formControlName="photo"></ion-input>
+      <div class="error-message" *ngIf="reportForm.get('photo')?.invalid && reportForm.get('photo')?.touched">
+        Seleccione una imagen para subir
+      </div>
+
+      
     </ion-item>
 
     <!-- Botón de enviar -->
@@ -85,4 +90,5 @@
       Si no deseas reportar una mascota, haz click en <a href="/profile">Atrás</a>.
     </ion-note>
   </form>
+
 </ion-content>
