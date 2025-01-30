@@ -16,37 +16,37 @@
    <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="profile-name-container">
     <!-- Campo de Correo -->
     <ion-item  class="profile-name-input">
-      <ion-label position="floating">Correo Electronico</ion-label>
+      <ion-label position="floating">Correo Electrónico</ion-label>
       <ion-input type="email" formControlName="email"></ion-input>
     </ion-item>
-    <div class="error-message" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched ">
+    <div class="error-message" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
       Ingresa un correo válido
     </div>
 
-    <!-- Campo de Contraseña -->
+    <!-- Campo de Contraseña -->
     <ion-item  class="profile-name-input">
       <ion-label position="floating">Contraseña</ion-label>
       <ion-input type="password" formControlName="password"></ion-input>
     </ion-item>
-    <div class="error-message" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched ">
+    <div class="error-message" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
       La contraseña es obligatoria
     </div>
 
     <!-- Botón de Iniciar Sesión -->
-     <ion-button expand="block" color="primary" [disabled]="loginForm.invalid" routerLink="/profile">Iniciar Sesión</ion-button>
+    <ion-button expand="block" color="primary" [disabled]="loginForm.invalid" type="submit">Iniciar Sesión</ion-button>
    </form>
 
    <!-- Enlaces de Registro y Recuperar Contraseña -->
-  <div class="links-container">
+   <div class="links-container">
     <ion-text color="medium">
       <p>
-        ¿No tienes una cuenta? <a (click)="goToRegister()">Registrate</a>
+        ¿No tienes una cuenta? <a (click)="goToRegister()">Regístrate</a>
       </p>
     </ion-text>
     <ion-text color="medium">
       <p>
-        Olvidaste tu contraseña? <a (click)="goToRecoverPassword()">Recupera tu contraseña</a>
+        ¿Olvidaste tu contraseña? <a (click)="goToRecoverPassword()">Recupera tu contraseña</a>
       </p>
     </ion-text>
-  </div>
+   </div>
 </ion-content>

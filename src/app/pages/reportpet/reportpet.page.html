@@ -29,23 +29,23 @@
     <!-- Número de Teléfono -->
     <ion-item class="profile-name-input">
       <ion-label position="floating">Número de Teléfono</ion-label>
-      <ion-input type="tel" formControlName="phone"></ion-input>
+      <ion-input type="phone" formControlName="phone"></ion-input>
     </ion-item>
     <div class="error-message" *ngIf="reportForm.get('phone')?.invalid && reportForm.get('phone')?.touched">
       Ingresa un número de teléfono válido
     </div>
 
     <!-- Fecha y hora -->
-      <ion-item class="profile-name-input">
-        <ion-label>Fecha</ion-label>
-        <ion-datetime-button datetime="datetime"></ion-datetime-button>
-  
-        <ion-modal [keepContentsMounted]="true">
-          <ng-template>
-            <ion-datetime id="datetime"></ion-datetime>
-          </ng-template>
-        </ion-modal>
-      </ion-item>
+    <ion-item class="profile-name-input">
+      <ion-label>Fecha</ion-label>
+      <ion-datetime-button datetime="datetime"></ion-datetime-button>
+
+      <ion-modal [keepContentsMounted]="true">
+        <ng-template>
+          <ion-datetime id="datetime"></ion-datetime>
+        </ng-template>
+      </ion-modal>
+    </ion-item>
 
     <!-- Tipo de Mascota -->
     <ion-item class="profile-name-input">
@@ -122,14 +122,15 @@
     <!-- Foto -->
     <ion-item class="profile-name-input">
       <ion-label position="fixed">Foto</ion-label>
-      <ion-input type="file" formControlName="photo"></ion-input>
+      <ion-button expand="block" (click)="takePhoto()">Tomar Foto</ion-button>
+      <ion-button expand="block" (click)="choosePhoto()">Seleccionar de Galería</ion-button>
     </ion-item>
     <div class="error-message" *ngIf="reportForm.get('photo')?.invalid && reportForm.get('photo')?.touched">
       Seleccione una imagen para subir
     </div>
 
     <!-- Botón de Enviar -->
-    <ion-button type="submit" expand="block" [disabled]="reportForm.invalid" routerLink="/profile">Enviar</ion-button>
+    <ion-button type="submit" expand="block" [disabled]="reportForm.invalid">Enviar</ion-button>
 
     <!-- Enlace para regresar -->
     <ion-note>

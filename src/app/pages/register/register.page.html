@@ -1,56 +1,75 @@
-<ion-header class="profile-header">
-  <ion-toolbar>
-    <ion-title class="profile-header-title">Registro</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="ion-padding">
+  <div class="form-container">
+    <h1>Crea una Cuenta</h1>
+    <p>Completa los campos para registrarte.</p>
 
-<ion-content class="profile-container">
+    <form (ngSubmit)="onRegister()" [formGroup]="registerForm">
+      <!-- Campo Nombre -->
+      <ion-item>
+        <ion-label position="floating">Nombre</ion-label>
+        <ion-input
+          type="text"
+          formControlName="name"
+          placeholder="Ingresa tu nombre"
+        ></ion-input>
+      </ion-item>
+      <ion-text color="danger" *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
+        El nombre es obligatorio y debe ser válido.
+      </ion-text>
 
+      <!-- Campo Teléfono -->
+      <ion-item>
+        <ion-label position="floating">Teléfono</ion-label>
+        <ion-input
+          type="text"
+          formControlName="phone"
+          placeholder="Ingresa tu teléfono"
+        ></ion-input>
+      </ion-item>
+      <ion-text color="danger" *ngIf="registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched">
+        Ingresa un teléfono válido de 9 dígitos.
+      </ion-text>
 
-  <form [formGroup]="registerForm" (ngSubmit)="onRegister()" class="profile-name-container">
-    <!-- Nombre -->
-    <ion-item class="profile-name-input">
-      <ion-icon slot="start" name="person-outline"></ion-icon>
-      <ion-input type="text" placeholder="Nombre" formControlName="name"></ion-input>
-    </ion-item>
-    <div class="error-message" *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
-      Ingresa un nombre válido
-    </div>
+      <!-- Campo Correo Electrónico -->
+      <ion-item>
+        <ion-label position="floating">Correo Electrónico</ion-label>
+        <ion-input
+          type="email"
+          formControlName="email"
+          placeholder="Ingresa tu correo"
+        ></ion-input>
+      </ion-item>
+      <ion-text color="danger" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+        Ingresa un correo válido.
+      </ion-text>
 
-    <!-- Teléfono -->
-    <ion-item class="profile-name-input">
-      <ion-icon slot="start" name="call-outline"></ion-icon>
-      <ion-input type="tel" placeholder="Teléfono" formControlName="phone"></ion-input>
-    </ion-item>
-    <div class="error-message" *ngIf="registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched">
-      Ingresa un número de teléfono válido
-    </div>
+      <!-- Campo Contraseña -->
+      <ion-item>
+        <ion-label position="floating">Contraseña</ion-label>
+        <ion-input
+          type="password"
+          formControlName="password"
+          placeholder="Crea una contraseña"
+        ></ion-input>
+      </ion-item>
+      <ion-text color="danger" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+        La contraseña debe tener al menos 6 caracteres.
+      </ion-text>
 
-    <!-- Correo Electrónico -->
-    <ion-item class="profile-name-input">
-      <ion-icon slot="start" name="mail-outline"></ion-icon>
-      <ion-input type="email" placeholder="Correo Electrónico" formControlName="email"></ion-input>
-    </ion-item>
-    <div class="error-message" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
-      Ingresa un correo válido
-    </div>
+      <!-- Botón de Registro -->
+      <ion-button expand="block" type="submit" [disabled]="registerForm.invalid">
+        Registrarse
+      </ion-button>
+    </form>
 
-    <!-- Contraseña -->
-    <ion-item class="profile-name-input">
-      <ion-icon slot="start" name="lock-closed-outline"></ion-icon>
-      <ion-input type="password" placeholder="Contraseña" formControlName="password"></ion-input>
-    </ion-item>
-    <div class="error-message" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
-      Ingresa una contraseña válida
-    </div>
-
-    <!-- Botón de Registro -->
-    <ion-button expand="block" color="primary" [disabled]="registerForm.invalid" routerLink="/login">
-      Registrarse
+    <!-- Botón para ir a Login -->
+    <ion-button fill="clear" routerLink="/login" expand="block">
+      Ya tengo cuenta
     </ion-button>
-  </form>
 
-  <ion-note class="profile-note">
-    Si ya tienes una cuenta, haz click en <a href="/login">Iniciar Sesión</a>.
-  </ion-note>
+    <!-- Mensaje de éxito -->
+    <ion-text *ngIf="successMessage" color="success">
+      ¡Registro exitoso! Redirigiendo a Login...
+    </ion-text>
+  </div>
 </ion-content>
