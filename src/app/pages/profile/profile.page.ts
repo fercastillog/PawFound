@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-profile',
@@ -16,19 +18,17 @@ export class ProfilePage implements OnInit {
   };
   userImage: string | undefined;
 
-  constructor(private navCtrl: NavController, private authService: AuthService) {}
+  constructor(
+    private navCtrl: NavController,
+    private authService: AuthService,
+    private storage: AngularFireStorage // Firebase Storage
+  ) {}
 
   ngOnInit() {
     this.loadUserProfile();
-    this.authService.getUserProfile().subscribe(userData => {
-      if (userData) {
-        this.user.name = userData.name || 'Usuario';
-        this.user.email = userData.email || 'Sin correo';
-        this.userImage = userData.imageUrl || undefined;
-      }
-    });
   }
 
+  /** 🔹 Cargar perfil del usuario */
   loadUserProfile() {
     this.authService.getUserProfile().subscribe((userData: any) => {
       if (userData) {
@@ -39,23 +39,59 @@ export class ProfilePage implements OnInit {
     });
   }
 
+  /** 🔹 Capturar imagen y subirla */
   async changeProfilePic() {
     try {
       const image = await Camera.getPhoto({
         quality: 90,
         allowEditing: true,
-        resultType: CameraResultType.Base64, // Para obtener la imagen en Base64
-        source: CameraSource.Prompt, // Muestra opciones: "Cámara" o "Galería"
+        resultType: CameraResultType.Base64, // Obtener en Base64
+        source: CameraSource.Prompt, // Pregunta si usar Cámara o Galería
       });
 
-      this.userImage = `data:image/jpeg;base64,${image.base64String}`;
+      if (!image.base64String) {
+        throw new Error('No se obtuvo la imagen.');
+      }
 
-      // Aquí podrías subir la imagen a un servidor o almacenamiento en la nube
+      const blob = this.base64ToBlob(image.base64String, 'image/jpeg');
+      const filePath = `profile_pics/${new Date().getTime()}_profile.jpg`;
+      const fileRef = this.storage.ref(filePath);
+      const uploadTask = this.storage.upload(filePath, blob);
+
+      uploadTask.snapshotChanges().pipe(
+        finalize(() => {
+          fileRef.getDownloadURL().subscribe(async (url) => {
+            if (url) {
+              this.userImage = url;
+              await this.authService.updateUserProfile({ imageUrl: url });
+            }
+          });
+        })
+      ).subscribe();
+
     } catch (error) {
-      console.error('Error al tomar la foto:', error);
+      console.log('Error al tomar la foto:', error);
     }
   }
 
+  /** 🔹 Convertir Base64 a Blob */
+  base64ToBlob(base64: string, contentType: string) {
+    const byteCharacters = atob(base64);
+    const byteArrays = [];
+
+    for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+      const slice = byteCharacters.slice(offset, offset + 512);
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+      byteArrays.push(new Uint8Array(byteNumbers));
+    }
+
+    return new Blob(byteArrays, { type: contentType });
+  }
+
+  /** 🔹 Cerrar sesión */
   logout() {
     this.authService.logout().then(() => {
       this.navCtrl.navigateRoot('/login');

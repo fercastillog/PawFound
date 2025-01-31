@@ -25,6 +25,7 @@ import { getStorage, provideStorage } from '@angular/fire/storage';
 import { getRemoteConfig, provideRemoteConfig } from '@angular/fire/remote-config';
 import { getVertexAI, provideVertexAI } from '@angular/fire/vertexai';
 
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -51,6 +52,7 @@ import { getVertexAI, provideVertexAI } from '@angular/fire/vertexai';
           provideFunctions(() => getFunctions()), provideMessaging(() => getMessaging()), 
           providePerformance(() => getPerformance()), provideStorage(() => getStorage()), 
           provideRemoteConfig(() => getRemoteConfig()), provideVertexAI(() => getVertexAI())],
+
   bootstrap: [AppComponent],
 })
 export class AppModule {}

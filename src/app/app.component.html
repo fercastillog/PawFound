@@ -6,18 +6,31 @@
 <footer>
   <ion-tabs>
     <ion-tab-bar slot="bottom">
-      <ion-tab-button tab="reportpet" routerLink="/reportpet">
-        <ion-icon name="person"></ion-icon>
+
+      <!-- ✅ Bloqueado si no ha iniciado sesión -->
+      <ion-tab-button tab="report" routerLink="/reportpet" [disabled]="!isLoggedIn">
+        <ion-icon name="warning"></ion-icon>
         Busco
       </ion-tab-button>
+
+      <!-- 🔹 Siempre disponible -->
       <ion-tab-button tab="pawfound" routerLink="/paw-found">
         <ion-icon name="paw"></ion-icon>
         PawFound
       </ion-tab-button>
-      <ion-tab-button tab="report" routerLink="/report">
+
+      <!-- ✅ Bloqueado si no ha iniciado sesión -->
+      <ion-tab-button tab="report" routerLink="/report" [disabled]="!isLoggedIn">
         <ion-icon name="warning"></ion-icon>
         Encontré
       </ion-tab-button>
+
+      <!-- ✅ Bloqueado si no ha iniciado sesión -->
+      <ion-tab-button tab="profile" routerLink="/profile" [disabled]="!isLoggedIn">
+        <ion-icon name="person"></ion-icon>
+        Perfil
+      </ion-tab-button>
+
     </ion-tab-bar>
   </ion-tabs>
 </footer>

@@ -1,108 +1,47 @@
-<ion-header [translucent]="true" class="profile-header">
+<ion-header>
   <ion-toolbar>
-    <ion-title class="profile-header-title">PAWFOUND!</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Paw Found</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <!--Cards con información de mascotas reportadas y perdidas-->
-  <ion-grid>
-    <!-- Cards de mascotas reportadas -->
-    <ion-row>
-      <ion-col size-md="6">
-        <ion-card>
-          <img class="pet-report-image" alt="gatoencontrado1" src="/assets/images/gatoencontrado1.png" />
-          <ion-card-header>
-            <ion-card-title>Mascota Reportada</ion-card-title>
-            <ion-card-subtitle>
-              Reportado por:<br>
-              <ion-text color="primary">Juan Perez</ion-text><br>
-              <ion-text color="primary">Estación Central</ion-text><br>
-              <ion-text color="danger">02 ene 2024</ion-text><br>
-              <ion-text color="primary">Gato</ion-text><br>
-              <ion-text color="primary">Macho</ion-text><br>
+<ion-item *ngFor="let report of reports$ | async">
+  <!-- 📷 Foto arriba -->
+  <div class="card">
+    <img *ngIf="report.photo" [src]="report.photo" alt="Foto de la mascota" class="card-image">
 
-            </ion-card-subtitle>
-          </ion-card-header>
-          <ion-card-content>
-            <p>descripcion</p>
-            <ion-text>Anda este gatito cerca de estacion central.</ion-text>
-            <ion-button expand="block" color="primary" routerLink="/login"  >Ver Detalles</ion-button>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
+    <ion-label>
+      <h2>{{ report.name }}</h2>
+      <p>Ubicación: {{ report.ubicacion }}</p>
+      <p>Fecha: {{ report.datetime }}</p>
+      <p>Animal: {{ report.animal }}</p>
+      <p>Descripción: {{ report.description }}</p>
 
-    <ion-row>
-      <ion-col size-md="6">
-        <ion-card>
-          <img class="pet-report-image" alt="perroperdido1" src="assets/images/perroperdido1.png" />
-          <ion-card-header>
-            <ion-card-title>Busco a mi Mascota</ion-card-title>
-            <ion-card-subtitle>
-              Reportado por:<br>
-              <ion-text color="primary">Jose Perez</ion-text><br>
-              <ion-text color="primary">Vitacura</ion-text><br>
-              <ion-text color="danger">07 ene 2024</ion-text><br>
-              <ion-text color="primary">Perro</ion-text><br>
-              <ion-text color="primary">Macho</ion-text><br>
+      <!-- 🔹 Botón "Ver más" -->
+      <ion-button fill="clear" color="primary" (click)="toggleDetails(report.id)">
+        {{ isExpanded[report.id] ? 'Ocultar' : 'Ver más' }}
+      </ion-button>
 
-            </ion-card-subtitle>
-          </ion-card-header>
-          <ion-card-content>
-            <p>descripcion</p>
-            <ion-text>Mi perrito se escapó en la comuna de Vitacura, se llama Thor.</ion-text>
-            <ion-button expand="block" color="primary" routerLink="/login" >Ver Detalles</ion-button>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-md="6">
-        <ion-card>
-          <img class="pet-report-image" alt="perroperdido2" src="assets/images/perroperdido2.png" />
-          <ion-card-header>
-            <ion-card-title>Mascota Reportada</ion-card-title>
-            <ion-card-subtitle>
-              Reportado por:<br>
-              <ion-text color="primary">Juan Jimenez</ion-text><br>
-              <ion-text color="primary">San Bernardo</ion-text><br>
-              <ion-text color="danger">07 ene 2024</ion-text><br>
-              <ion-text color="primary">Perro</ion-text><br>
-              <ion-text color="primary">Macho</ion-text><br>
-            </ion-card-subtitle>
-          </ion-card-header>
-          <ion-card-content>
-            <p>descripcion</p>
-            <ion-text>Anda este perrito, se nota que esta perdido.</ion-text>
-            <ion-button expand="block" color="primary" routerLink="/login"  >Ver Detalles</ion-button>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  <ion-row>
-    <ion-col size-md="6">
-      <ion-card>
-        <img class="pet-report-image" alt="gatoencontrado2" src="assets/images/gatoperdido2.png" />
-        <ion-card-header>
-          <ion-card-title>Busco a mi Mascota</ion-card-title>
-          <ion-card-subtitle>
-            Reportado por:<br>
-            <ion-text color="primary">Juanita Perez</ion-text><br>
-            <ion-text color="primary">La Reina</ion-text><br>
-            <ion-text color="danger">06 ene 2024</ion-text><br>
-            <ion-text color="primary">Gato</ion-text><br>
-            <ion-text color="primary">Macho</ion-text><br>
-          </ion-card-subtitle>
-        </ion-card-header>
-        <ion-card-content>
-          <p>descripcion</p>
-          <ion-text>Se perdió mi gatito Rayita en la comuna de La Reina</ion-text>
-          <ion-button expand="block" color="primary" routerLink="/login"  >Ver Detalles</ion-button>
-        </ion-card-content>
-      </ion-card>
-    </ion-col>
-  </ion-row>
-  <!-- -->
+      <!-- 🔹 Mensaje para no logueados -->
+      <ng-container *ngIf="!isLoggedIn">
+        <p style="color: red; font-style: italic;">🔐 Inicia sesión para ver más detalles.</p>
+      </ng-container>
+
+      <!-- 🔹 Mostrar detalles solo si el usuario está logueado y el card está expandido -->
+      <ng-container *ngIf="isExpanded[report.id] && isLoggedIn">
+        <p>Raza: {{ report.raza }}</p>
+        <p>Edad: {{ report.edad }}</p>
+        <p>Recompensa: {{ report.reward }}</p>
+        <!-- Botón de WhatsApp -->
+<ion-button *ngIf="report.phone" fill="outline" color="success" (click)="openWhatsApp(report.phone)">
+  <ion-icon name="logo-whatsapp" slot="start"></ion-icon>
+  Contactar por WhatsApp
+</ion-button>
+      </ng-container>
+    </ion-label>
+  </div>
+</ion-item>
 </ion-content>

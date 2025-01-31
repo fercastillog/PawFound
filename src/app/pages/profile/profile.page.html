@@ -1,25 +1,22 @@
-<ion-header [translucent]="true" class="profile-header">
+<ion-header>
   <ion-toolbar>
-    <ion-title class="profile-header-title">Perfil</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Perfil</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="profile-container">
-
-  <!-- Contenedor de la imagen de perfil -->
-  <div class="profile-picture">
+  <!-- Imagen de perfil (se toca para cambiar) -->
+  <div class="profile-picture" (click)="changeProfilePic()">
     <img *ngIf="userImage; else placeholder" [src]="userImage" alt="Foto de perfil" />
     <ng-template #placeholder>
       <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
     </ng-template>
-
-    <!-- Ícono para cambiar foto -->
-    <div class="camera-icon" (click)="changeProfilePic()">
-      <ion-icon name="camera-outline" size="small"></ion-icon>
-    </div>
   </div>
 
-  <!-- Formulario de edición de nombre -->
+  <!-- Información del usuario -->
   <div class="profile-name-container">
     <div class="profile-name-input">
       <ion-icon name="person-outline"></ion-icon>
@@ -33,21 +30,14 @@
 
   <!-- Botones de acciones -->
   <div class="profile-buttons">
-    <button class="profile-button" routerLink="/change-password">
-      Cambiar Contraseña
-    </button>
-    <button class="profile-button" routerLink="/my-reports">
-      Mis Reportes
-    </button>
-    <button class="profile-button" routerLink="/report">
-      Reportar Mascota
-    </button>
-    <button class="profile-button" routerLink="/reportpet">
-      Publicar Mascota
-    </button>
+    <button class="profile-button" routerLink="/change-password">Cambiar Contraseña</button>
+    <button class="profile-button" routerLink="/my-reports">Mis Reportes</button>
+    <button class="profile-button" routerLink="/report">Reportar Mascota</button>
+    <button class="profile-button" routerLink="/reportpet">Publicar Mascota</button>
     <button class="profile-button" color="danger" (click)="logout()">
-      Cerrar Sesión
-      <ion-icon name="log-out-outline"></ion-icon>
+      Cerrar Sesión <ion-icon name="log-out-outline"></ion-icon>
     </button>
   </div>
+
+
 </ion-content>
