@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NavController } from '@ionic/angular';
+import { NavController, ToastController } from '@ionic/angular';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { Firestore, collection, addDoc } from '@angular/fire/firestore'; // Importación correcta para Firestore en versión modular
-import { inject } from '@angular/core'; // Necesario para la nueva inyección modular
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Component({
   selector: 'app-reportpet',
@@ -14,11 +13,12 @@ import { inject } from '@angular/core'; // Necesario para la nueva inyección mo
 export class ReportpetPage implements OnInit {
   reportForm: FormGroup;
   photoBase64: string | null = null;
-  firestore = inject(Firestore); // Usando la inyección modular de Firestore
 
   constructor(
     private fb: FormBuilder,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private toastController: ToastController,
+    private firestore: AngularFirestore
   ) {
     this.reportForm = this.fb.group({
       name: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*')]],
@@ -28,89 +28,62 @@ export class ReportpetPage implements OnInit {
       animal: ['', Validators.required],
       sexo: ['', Validators.required],
       raza: ['', Validators.required],
-      edad: ['', Validators.required],
-      description: ['', [Validators.required, Validators.maxLength(100)]],
+      edad: ['', [Validators.required, Validators.min(0)]],
+      description: ['', [Validators.required, Validators.maxLength(200)]],
       reward: ['', [Validators.required, Validators.min(0)]],
-      photo: ['', Validators.required]  // Foto como campo obligatorio
+      photo: ['']
     });
   }
 
-  ngOnInit() {
-    console.log('Estado inicial del formulario:', this.reportForm.status);
-  }
+  ngOnInit() {}
 
-  // Método para tomar una foto
   async takePhoto() {
-    try {
-      const image = await Camera.getPhoto({
-        quality: 90,
-        resultType: CameraResultType.Base64,
-        source: CameraSource.Camera,
-      });
+    const image = await Camera.getPhoto({
+      quality: 90,
+      resultType: CameraResultType.Base64,
+      source: CameraSource.Camera,
+    });
 
-      if (image.base64String) {
-        this.photoBase64 = image.base64String;
-        this.reportForm.patchValue({
-          photo: this.photoBase64  // Asignar la foto base64 al formulario
-        });
-      }
-    } catch (error: any) {
-      console.error('Error al tomar la foto:', error);
+    if (image.base64String) {
+      this.photoBase64 = `data:image/jpeg;base64,${image.base64String}`;
+      this.reportForm.patchValue({ photo: this.photoBase64 });
     }
   }
 
-  // Método para seleccionar una foto de la galería
   async choosePhoto() {
-    try {
-      const image = await Camera.pickImages({
-        quality: 90
-      });
+    const image = await Camera.getPhoto({
+      quality: 90,
+      resultType: CameraResultType.Base64,
+      source: CameraSource.Photos,
+    });
 
-      if (image.photos.length > 0) {
-        const selectedImage = image.photos[0];
-        this.photoBase64 = selectedImage.webPath ? selectedImage.webPath : null;
-        this.reportForm.patchValue({
-          photo: this.photoBase64  // Asignar la foto seleccionada al formulario
-        });
-      }
-    } catch (error: any) {
-      console.error('Error al seleccionar la foto:', error);
+    if (image.base64String) {
+      this.photoBase64 = `data:image/jpeg;base64,${image.base64String}`;
+      this.reportForm.patchValue({ photo: this.photoBase64 });
     }
   }
 
-  // Enviar el formulario
   async onReport() {
     if (this.reportForm.valid) {
-      console.log('Datos enviados:', this.reportForm.value);
+      await this.firestore.collection('reports').add({
+        ...this.reportForm.value,
+        timestamp: new Date().toISOString(),
+      });
 
-      try {
-        // Obtener la colección 'reports' en Firestore
-        const reportsCollection = collection(this.firestore, 'reports');
-
-        // Agregar el documento con los datos del formulario
-        await addDoc(reportsCollection, {
-          name: this.reportForm.value.name,
-          ubicacion: this.reportForm.value.ubicacion,
-          phone: this.reportForm.value.phone,
-          animal: this.reportForm.value.animal,
-          sexo: this.reportForm.value.sexo,
-          raza: this.reportForm.value.raza,
-          edad: this.reportForm.value.edad,
-          description: this.reportForm.value.description,
-          reward: this.reportForm.value.reward,
-          photo: this.reportForm.value.photo,  // La foto que se capturó o seleccionó
-          datetime: this.reportForm.value.datetime  // La fecha y hora si está configurado
-        });
-
-        console.log('Reporte guardado correctamente en Firebase');
-        this.reportForm.reset();  // Restablecer el formulario
-        this.navCtrl.navigateForward('/profile');  // Navegar a otra página si es necesario
-
-      } catch (error: any) {
-        console.error('Error al guardar los datos en Firebase:', error);
-      }
-    } else {
-      console.log('Formulario inválido');
+      this.showToast('Reporte enviado con éxito', 'success');
+      this.reportForm.reset();
+      this.photoBase64 = null;
+      this.navCtrl.navigateForward('/profile');
     }
+  }
+
+  async showToast(message: string, color: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 3000,
+      color,
+      position: 'top',
+    });
+    await toast.present();
   }
 }

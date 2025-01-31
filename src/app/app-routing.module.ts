@@ -39,7 +39,8 @@ const routes: Routes = [
   {
     path: 'report',
     loadChildren: () => import('./pages/report/report.module').then( m => m.ReportPageModule)
-  },  {
+  },
+  {
     path: 'input',
     loadChildren: () => import('./components/input/input.module').then( m => m.InputPageModule)
   },
@@ -47,6 +48,7 @@ const routes: Routes = [
     path: 'reportpet',
     loadChildren: () => import('./pages/reportpet/reportpet.module').then( m => m.ReportpetPageModule)
   },
+
 
 
 ];

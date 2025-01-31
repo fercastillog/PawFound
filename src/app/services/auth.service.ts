@@ -1,72 +1,80 @@
-import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { User } from '../models/user.model';
+import { Injectable, inject } from '@angular/core';
+import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, User } from '@angular/fire/auth';
+import { Firestore, doc, setDoc, docData } from '@angular/fire/firestore';
+import { Observable, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { authState } from 'rxfire/auth';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  
+  private auth: Auth = inject(Auth);
+  private firestore: Firestore = inject(Firestore);
 
-  constructor(
-    private auth: AngularFireAuth, 
-    private firestore: AngularFirestore
-  ) {
-    console.log('AuthService inicializado correctamente');
-  }
-  // Login
-  login(email: string, password: string): Promise<any> {
-    return this.auth.signInWithEmailAndPassword(email, password);
+  user$: Observable<User | null> = authState(this.auth);
+
+  constructor() {
+    console.log('✅ AuthService inicializado correctamente');
   }
 
-  // Método para registrar un usuario
-  register(user: User): Promise<any> {
-    return this.auth.createUserWithEmailAndPassword(user.email, user.password)
-      .then((cred) => {
-        console.log('Usuario creado:', cred);
+  /** 🔹 LOGIN - Iniciar sesión */
+  async login(email: string, password: string): Promise<any> {
+    try {
+      const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
+      return userCredential;
+    } catch (error) {
+      console.error('❌ Error en login:', error);
+      throw error;
+    }
+  }
 
-        if (!cred.user?.uid) {
-          throw new Error('Error al obtener UID del usuario');
-        }
+  /** 🔹 REGISTRO DE USUARIO */
+  async register(name: string, email: string, password: string, phone: string): Promise<{ success: boolean }> {
+    try {
+      const cred = await createUserWithEmailAndPassword(this.auth, email, password);
+      if (!cred.user?.uid) throw new Error('Error al obtener UID del usuario');
 
-        // Guardamos el usuario en Firestore
-        return this.firestore.collection('users').doc(cred.user.uid).set({
-          name: user.name,
-          phone: user.phone,  // Ahora guarda el teléfono también
-          email: user.email,
-          uid: cred.user.uid 
-        });
-      })
-      .then(() => {
-        console.log('Usuario guardado en Firestore correctamente');
-        return { success: true };
-      })
-      .catch((error) => {
-        console.error('Error en el registro:', error);
-        throw error; // Relanzamos el error para capturarlo en el componente
+      const userDocRef = doc(this.firestore, `users/${cred.user.uid}`);
+      await setDoc(userDocRef, {
+        uid: cred.user.uid,
+        name,
+        phone,
+        email
       });
+
+      return { success: true };
+    } catch (error) {
+      console.error('❌ Error en el registro:', error);
+      throw error;
+    }
   }
 
-  // Recuperar contraseña
-  recoverPassword(email: string): Promise<void> {
-    return this.auth.sendPasswordResetEmail(email);
+  /** 🔹 RECUPERAR CONTRASEÑA */
+  async recoverPassword(email: string): Promise<void> {
+    try {
+      await sendPasswordResetEmail(this.auth, email);
+    } catch (error) {
+      console.error('❌ Error en recuperación de contraseña:', error);
+      throw error;
+    }
   }
 
-  // Logout
-  logout(): Promise<void> {
-    return this.auth.signOut();
+  /** 🔹 CERRAR SESIÓN */
+  async logout(): Promise<void> {
+    try {
+      await signOut(this.auth);
+    } catch (error) {
+      console.error('❌ Error al cerrar sesión:', error);
+      throw error;
+    }
   }
 
-  // Obtener el UID del usuario actual
-  getUserId(): Promise<string> {
-    return new Promise((resolve, reject) => {
-      this.auth.onAuthStateChanged((user) => {
-        if (user) {
-          resolve(user.uid);
-        } else {
-          resolve('');
-        }
-      });
-    });
+  /** 🔹 OBTENER PERFIL DEL USUARIO (DATOS DESDE FIRESTORE) */
+  getUserProfile(): Observable<any> {
+    return this.user$.pipe(
+      switchMap(user => user?.uid ? docData(doc(this.firestore, `users/${user.uid}`)) : of(null))
+    );
   }
 }

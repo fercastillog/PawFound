@@ -17,46 +17,44 @@ export class RegisterPage implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService, 
     private router: Router,
-    private ngZone: NgZone // 👈 Importamos NgZone para manejar la navegación
+    private ngZone: NgZone
   ) {
     this.registerForm = this.fb.group({
-      name: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*')]],
-      phone: ['', [Validators.required, Validators.pattern('[0-9]{9}')]], 
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],  
+      phone: ['', [Validators.required, Validators.pattern('^[0-9]{9,15}$')]],  
+      email: ['', [Validators.required, Validators.email]],  
+      password: ['', [Validators.required, Validators.minLength(6)]],  
     });
   }
 
   ngOnInit() {}
 
-  onRegister() {
+  async onRegister() {
     if (this.registerForm.valid) {
       const { name, phone, email, password } = this.registerForm.value;
-      const user = { name, phone, email, password };
 
-      this.authService
-        .register(user)
-        .then((response) => {
-          if (response.success) {
-            this.successMessage = true;
-            console.log('✅ Registro exitoso! Redirigiendo a login...');
-
-            setTimeout(() => {
-              this.ngZone.run(() => {  
-                this.router.navigate(['/login'], { replaceUrl: true });
-              });
-            }, 2000);
-          }
-        })
-        .catch((error) => {
-          console.error('❌ Error durante el registro:', error);
-          this.showErrorToast(error.message);
-        });
+      try {
+        const response = await this.authService.register(name, email, password, phone);
+        if (response.success) {
+          this.successMessage = true;
+          console.log('✅ Registro exitoso! Redirigiendo a login...');
+          
+          // ✅ Asegurar redirección usando NgZone
+          this.ngZone.run(() => {
+            this.router.navigate(['/login'], { replaceUrl: true });
+          });
+        }
+      } catch (error: any) {
+        console.error('❌ Error durante el registro:', error);
+        this.showErrorToast(error.message);
+      }
     } else {
-      console.log('Formulario inválido');
+      console.log('❌ Formulario inválido');
+      this.showErrorToast('Por favor, completa correctamente el formulario.');
     }
   }
 
+  /** 🔹 Mostrar mensaje de error */
   async showErrorToast(message: string) {
     const toast = document.createElement('ion-toast');
     toast.message = message;

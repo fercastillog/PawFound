@@ -1,9 +1,16 @@
-import type { CapacitorConfig } from '@capacitor/cli';
+import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'PawFound',
-  webDir: 'www'
+  appId: 'com.tuapp.id',
+  appName: 'TuApp',
+  webDir: 'www',
+  bundledWebRuntime: false,
+  plugins: {
+    Camera: {
+      allowEditing: true,
+      resultType: 'base64',
+    },
+  },
 };
 
 export default config;
