@@ -1,1 +1,4 @@
-{}
+{  "appId": "com.pawfound.app",
+"appName": "PawFound",
+"webDir": "www",
+"bundledWebRuntime": false}
