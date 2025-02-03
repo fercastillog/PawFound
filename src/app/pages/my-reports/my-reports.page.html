@@ -4,46 +4,39 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content *ngIf="reports.length > 0; else noReports" class="ion-padding">
 
-  <ion-list [inset]="true">
-    <ion-item-sliding>
-      <ion-item [button]="true">
-        <ion-grid>
-          <ion-row>
-            <ion-col size-md="6">
-              <ion-card>
-                <img class="pet-report-image" alt="gatoencontrado2" src="assets/images/gatoperdido2.png" />
-                <ion-card-header>
-                  <ion-card-title>Busco a mi Mascota</ion-card-title>
-                  <ion-card-subtitle>
-                    Reportado por:<br>
-                    <ion-text color="primary">Juanita Perez</ion-text><br>
-                    <ion-text color="primary">La Reina</ion-text><br>
-                    <ion-text color="danger">06 ene 2024</ion-text><br>
-                    <ion-text color="primary">Gato</ion-text><br>
-                    <ion-text color="primary">Macho</ion-text><br>
-                  </ion-card-subtitle>
-                </ion-card-header>
-                <ion-card-content>
-                  <p>descripcion</p>
-                  <ion-text>Se perdió mi gatito Rayita en la comuna de La Reina</ion-text>
-                  <ion-button expand="block" color="primary" routerLink="/profile"  >Ver Detalles</ion-button>
-                </ion-card-content>
-              </ion-card>
-            </ion-col>
-          </ion-row>
-      </ion-grid>        
-      </ion-item>
-      <ion-item-options slot="end">
-        <ion-item-option color="success">
-          <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
-        </ion-item-option>
-        <ion-item-option color="tertiary">
-          <ion-icon slot="icon-only" name="share"></ion-icon>
-        </ion-item-option>
-        <ion-item-option color="danger" expandable="true">
-          <ion-icon slot="icon-only" name="trash"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
+  <ion-card *ngFor="let report of reports">
+    <img *ngIf="report.photo" [src]="report.photo" alt="Imagen de la mascota" />
+
+    <ion-card-header>
+      <ion-card-title>{{ report.animal | titlecase }} - {{ report.sexo | titlecase }}</ion-card-title>
+      <ion-card-subtitle>{{ report.datetime | date:'medium' }}</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p><strong>Ubicación:</strong> {{ report.ubicacion }}</p>
+      <p><strong>Descripción:</strong> {{ report.description }}</p>
+      <p><strong>Teléfono:</strong> {{ report.phone }}</p>
+    </ion-card-content>
+
+    <ion-row>
+      <ion-col>
+        <ion-button color="danger" expand="full" (click)="deleteReport(report.id)">
+          <ion-icon name="trash"></ion-icon> Eliminar
+        </ion-button>
+      </ion-col>
+    </ion-row>
+
+  </ion-card>
+
+</ion-content>
+
+<!-- Mensaje si no hay reportes -->
+<ng-template #noReports>
+  <ion-content class="ion-padding">
+    <ion-text color="medium">
+      <h2 class="ion-text-center">No tienes reportes registrados.</h2>
+    </ion-text>
+  </ion-content>
+</ng-template>

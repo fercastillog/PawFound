@@ -15,6 +15,9 @@
       <ion-label position="floating">Nombre</ion-label>
       <ion-input type="text" formControlName="name"></ion-input>
     </ion-item>
+    <ion-text color="danger" *ngIf="reportForm.get('name')?.invalid && reportForm.get('name')?.touched">
+      Nombre inválido (solo letras).
+    </ion-text>
 
     <!-- Ubicación -->
     <ion-item>
@@ -27,6 +30,9 @@
       <ion-label position="floating">Teléfono</ion-label>
       <ion-input type="tel" formControlName="phone"></ion-input>
     </ion-item>
+    <ion-text color="danger" *ngIf="reportForm.get('phone')?.invalid && reportForm.get('phone')?.touched">
+      Número inválido (9 dígitos).
+    </ion-text>
 
     <!-- Tipo de mascota -->
     <ion-item>
@@ -67,7 +73,7 @@
     <!-- Edad -->
     <ion-item>
       <ion-label position="floating">Edad</ion-label>
-      <ion-input type="number" formControlName="edad"></ion-input>
+      <ion-input type="number" formControlName="edad" min="0"></ion-input>
     </ion-item>
 
     <!-- Descripción -->
@@ -79,20 +85,24 @@
     <!-- Recompensa -->
     <ion-item>
       <ion-label position="floating">Recompensa</ion-label>
-      <ion-input type="number" formControlName="reward"></ion-input>
+      <ion-input type="number" formControlName="reward" min="0"></ion-input>
     </ion-item>
 
-        <!-- Fecha -->
-        <ion-item>
-          <ion-label>Fecha</ion-label>
-          <ion-datetime formControlName="datetime"></ion-datetime>
-        </ion-item>
+    <!-- Fecha -->
+    <ion-item>
+      <ion-label>Fecha</ion-label>
+      <ion-datetime formControlName="datetime" display-format="DD MMM YYYY HH:mm"></ion-datetime>
+    </ion-item>
 
     <!-- Foto -->
     <ion-item>
       <ion-label position="fixed">Foto</ion-label>
-      <ion-button expand="block" (click)="takePhoto()">Tomar Foto</ion-button>
-      <ion-button expand="block" (click)="choosePhoto()">Seleccionar de Galería</ion-button>
+      <ion-button expand="block" fill="outline" (click)="takePhoto()">
+        <ion-icon name="camera"></ion-icon> Tomar Foto
+      </ion-button>
+      <ion-button expand="block" fill="outline" (click)="choosePhoto()">
+        <ion-icon name="image"></ion-icon> Seleccionar de Galería
+      </ion-button>
     </ion-item>
 
     <!-- Vista previa de la imagen -->
@@ -102,7 +112,9 @@
     </ion-item>
 
     <!-- Botón de enviar -->
-    <ion-button type="submit" expand="block" >Enviar</ion-button>
+    <ion-button type="submit" expand="block" [disabled]="reportForm.invalid">
+      Enviar
+    </ion-button>
 
   </form>
 </ion-content>

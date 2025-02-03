@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController, ToastController } from '@ionic/angular';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { Firestore, collection, addDoc } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, getFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-reportpet',
@@ -13,16 +13,13 @@ import { Firestore, collection, addDoc } from '@angular/fire/firestore';
 export class ReportpetPage implements OnInit {
   reportForm: FormGroup;
   photoBase64: string | null = null;
-  private firestore: Firestore;
 
   constructor(
     private fb: FormBuilder,
     private navCtrl: NavController,
     private toastController: ToastController,
-    firestore: Firestore
+    private firestore: Firestore
   ) {
-    this.firestore = firestore;
-
     this.reportForm = this.fb.group({
       name: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*')]],
       ubicacion: ['', Validators.required],
@@ -34,7 +31,7 @@ export class ReportpetPage implements OnInit {
       edad: ['', [Validators.required, Validators.min(0)]],
       description: ['', [Validators.required, Validators.maxLength(200)]],
       reward: ['', [Validators.required, Validators.min(0)]],
-      photo: [''], // La imagen en Base64
+      photo: [''],
     });
   }
 
@@ -72,27 +69,28 @@ export class ReportpetPage implements OnInit {
   async onReport() {
     if (!this.reportForm.valid) {
       console.warn('⚠️ Formulario inválido, revisa los datos ingresados.');
-      console.table(this.reportForm.value); // 👀 Ver todos los valores ingresados en consola
+      console.table(this.reportForm.value);
       return;
     }
-  
+
     try {
-      const reportsCollection = collection(this.firestore, 'reports');
+      const db = getFirestore();
+      const reportsCollection = collection(db, 'reports');
+
       await addDoc(reportsCollection, {
         ...this.reportForm.value,
         timestamp: new Date().toISOString(),
       });
-  
-      this.showToast('Reporte enviado con éxito', 'success');
+
+      this.showToast('📌 Reporte enviado con éxito', 'success');
       this.reportForm.reset();
       this.photoBase64 = null;
       this.navCtrl.navigateForward('/paw-found');
     } catch (error) {
       console.error('❌ Error al enviar reporte:', error);
-      this.showToast('Error al enviar reporte', 'danger');
+      this.showToast('🚨 Error al enviar reporte', 'danger');
     }
   }
-  
 
   /** 🔹 Mostrar mensaje */
   async showToast(message: string, color: string) {

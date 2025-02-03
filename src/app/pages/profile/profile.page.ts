@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
-import { AuthService } from 'src/app/services/auth.service';
+import { Component, OnInit, inject } from '@angular/core';
+import { NavController, ToastController } from '@ionic/angular';
+import { Auth, getAuth, onAuthStateChanged } from '@angular/fire/auth';
+import { Firestore, doc, getDoc, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { AngularFireStorage } from '@angular/fire/compat/storage';
-import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-profile',
@@ -12,34 +11,49 @@ import { finalize } from 'rxjs/operators';
   standalone: false,
 })
 export class ProfilePage implements OnInit {
-  user = {
-    name: '',
-    email: '',
-  };
+  user = { name: '', email: '' };
   userImage: string | undefined;
+  auth = getAuth();
+  firestore = inject(Firestore);
 
   constructor(
     private navCtrl: NavController,
-    private authService: AuthService,
-    private storage: AngularFireStorage // Firebase Storage
+    private toastController: ToastController
   ) {}
 
   ngOnInit() {
-    this.loadUserProfile();
-  }
-
-  /** 🔹 Cargar perfil del usuario */
-  loadUserProfile() {
-    this.authService.getUserProfile().subscribe((userData: any) => {
-      if (userData) {
-        this.user.name = userData.name || 'Usuario';
-        this.user.email = userData.email || 'Sin correo';
-        this.userImage = userData.imageUrl || undefined;
+    // Esperar a que el usuario se autentique antes de cargar datos
+    onAuthStateChanged(this.auth, (user) => {
+      if (user) {
+        this.loadUserProfile(user.uid);
+      } else {
+        this.showToast('Debes iniciar sesión para ver tu perfil', 'warning');
+        this.navCtrl.navigateRoot('/login');
       }
     });
   }
 
-  /** 🔹 Capturar imagen y subirla */
+  /** 🔹 Cargar perfil del usuario desde Firestore */
+  async loadUserProfile(userId: string) {
+    const userRef = doc(this.firestore, 'users', userId);
+    try {
+      const userSnap = await getDoc(userRef);
+      if (userSnap.exists()) {
+        const userData = userSnap.data();
+        this.user.name = userData?.['name'] || 'Usuario';
+        this.user.email = userData?.['email'] || 'Sin correo';
+        this.userImage = userData?.['imageUrl'] || undefined;
+      } else {
+        // Si no existe, crear usuario en Firestore
+        await setDoc(userRef, { name: this.auth.currentUser?.displayName, email: this.auth.currentUser?.email });
+      }
+    } catch (error) {
+      console.error('Error al cargar perfil:', error);
+      this.showToast('Error al cargar perfil', 'danger');
+    }
+  }
+
+  /** 📸 Cambiar foto de perfil (Guardada en Firestore como Base64) */
   async changeProfilePic() {
     try {
       const image = await Camera.getPhoto({
@@ -53,47 +67,38 @@ export class ProfilePage implements OnInit {
         throw new Error('No se obtuvo la imagen.');
       }
 
-      const blob = this.base64ToBlob(image.base64String, 'image/jpeg');
-      const filePath = `profile_pics/${new Date().getTime()}_profile.jpg`;
-      const fileRef = this.storage.ref(filePath);
-      const uploadTask = this.storage.upload(filePath, blob);
+      const userId = this.auth.currentUser?.uid;
+      if (!userId) return;
 
-      uploadTask.snapshotChanges().pipe(
-        finalize(() => {
-          fileRef.getDownloadURL().subscribe(async (url) => {
-            if (url) {
-              this.userImage = url;
-              await this.authService.updateUserProfile({ imageUrl: url });
-            }
-          });
-        })
-      ).subscribe();
+      const base64Image = `data:image/jpeg;base64,${image.base64String}`;
 
+      // Guardar en Firestore
+      const userRef = doc(this.firestore, 'users', userId);
+      await updateDoc(userRef, { imageUrl: base64Image });
+
+      // Actualizar la UI con la nueva imagen
+      this.userImage = base64Image;
+      this.showToast('✅ Foto de perfil actualizada', 'success');
     } catch (error) {
-      console.log('Error al tomar la foto:', error);
+      console.error('❌ Error al cambiar la foto:', error);
+      this.showToast('Error al cambiar la foto', 'danger');
     }
   }
 
-  /** 🔹 Convertir Base64 a Blob */
-  base64ToBlob(base64: string, contentType: string) {
-    const byteCharacters = atob(base64);
-    const byteArrays = [];
-
-    for (let offset = 0; offset < byteCharacters.length; offset += 512) {
-      const slice = byteCharacters.slice(offset, offset + 512);
-      const byteNumbers = new Array(slice.length);
-      for (let i = 0; i < slice.length; i++) {
-        byteNumbers[i] = slice.charCodeAt(i);
-      }
-      byteArrays.push(new Uint8Array(byteNumbers));
-    }
-
-    return new Blob(byteArrays, { type: contentType });
+  /** 🔔 Mostrar mensaje de Toast */
+  async showToast(message: string, color: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 3000,
+      color,
+      position: 'top',
+    });
+    await toast.present();
   }
 
-  /** 🔹 Cerrar sesión */
+  /** 🔓 Cerrar sesión */
   logout() {
-    this.authService.logout().then(() => {
+    this.auth.signOut().then(() => {
       this.navCtrl.navigateRoot('/login');
     }).catch(err => console.error('Error al cerrar sesión', err));
   }
